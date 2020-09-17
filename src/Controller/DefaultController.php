@@ -6,15 +6,10 @@ namespace App\Controller;
 
 use Core\Controller\AController;
 
-class BookController extends AController
+class DefaultController extends AController
 {
-    public function listAction()
+    public function indexAction()
     {
-        $this->render('book/list.html.twig');
-    }
-
-    public function showAction()
-    {
-        $this->render('book/show.html.twig');
+        $this->render('default/index.html.twig');
     }
 }
