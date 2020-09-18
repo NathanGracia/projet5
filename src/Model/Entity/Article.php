@@ -5,6 +5,8 @@ namespace App\Model\Entity;
 class Article
 {
     
+    private $table  = "articles";
+
     private $id;
     
     private $author;
@@ -136,6 +138,22 @@ class Article
     public function setSlug($slug): void
     {
         $this->slug = $slug;
+    }
+    
+     /**
+     * @return mixed
+     */
+    public function getTable()
+    {
+        return $this->table;
+    }
+
+    /**
+     * @param mixed $table
+     */
+    public function setTable($table): void
+    {
+        $this->table = $table;
     }
     
  
