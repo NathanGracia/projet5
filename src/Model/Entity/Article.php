@@ -5,8 +5,7 @@ namespace App\Model\Entity;
 class Article
 {
     
-    private $table  = "articles";
-
+    private static $table  = "article";
     private $id;
     
     private $author;
@@ -38,10 +37,11 @@ class Article
     {
         $this->id = $id;
         $this->author = $author;
-        $this->$created_at = $created_at;
-        $this->$content = $content;
-        $this->$slug = $slug;
-        $this->$title = $title;
+        $this->created_at = $created_at;
+        $this->content = $content;
+        $this->slug = $slug;
+        $this->title = $title;
+       
     }
     
     /**
@@ -143,18 +143,20 @@ class Article
      /**
      * @return mixed
      */
-    public function getTable()
+    public static function  getTable()
     {
-        return $this->table;
+        return self::$table;
     }
 
     /**
      * @param mixed $table
      */
-    public function setTable($table): void
+    public static function setTable($table): void
     {
-        $this->table = $table;
+        self::$table = $table;
     }
+
+
     
  
 }

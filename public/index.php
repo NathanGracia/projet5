@@ -1,33 +1,35 @@
 <?php
 
+use Core\Router\Router;
+
 require_once '../vendor/autoload.php';
 
+$url = $_SERVER['PATH_INFO'] ?? 'default/index';
 
-//recup le parametre uri : public?uri=article.show
-$uri = $_GET['uri'] ?? 'default.index'; 
-$param = $_GET['param'] ?? '';
-$uriParts = explode('.', $uri);
+//enlève le / a la fin de l'url si il y'ne a un
+if ($url[strlen($url) - 1] === '/') {
+    $url = substr($url, 0, -1);
+}
 
-//trouve le controller
-$controllerName = 'App\\Controller\\' . ucfirst($uriParts[0]) . 'Controller';
+$router = new Router();
+$routeTarget = $router->findRoute($url);
 
-if (!class_exists($controllerName)) {
+
+if (!$routeTarget) {
     die ('404');
 }
-$controller = new $controllerName();
 
-//trouve la methode
-$actionName = ucfirst($uriParts[1]) . 'Action';
+$controllerName = $routeTarget->getControllerClass();
+
+if (!class_exists($controllerName)) {
+    die ('500');
+}
+
+$controller = new $controllerName();
+$actionName = $routeTarget->getActionName();
 
 if (!method_exists($controller, $actionName)) {
-    die ('404.2');
+    die ('500');
 }
 
-
-if(!empty($param)) {
-    $controller->$actionName($param);
-}
-else {
-    $controller->$actionName();
-}
-
+$controller->$actionName($routeTarget->getParameters());

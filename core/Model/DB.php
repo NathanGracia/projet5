@@ -3,11 +3,13 @@ namespace Core\Model;
 use PDO;
 
 class DB {
-    private $db;
+    private static $_instance = null;
+
+    private $DB;
 
 
     public function __construct(){
-        
+ 
         $user = "root";
         $password ="";
         try
@@ -16,41 +18,62 @@ class DB {
         }catch(PDOException $e){
             print "Erreur : " .$e->getMessage()."<br>";die;
         }
-        $this->db = $db;
-        return $db;
+     
+        $this->DB = $db;
+      
          
     }
-
-        /**
-     * @return mixed
-     */
-    public function getDb()
-    {
-        return $this->db;
-    }
-
-    /**
-     * @param mixed $db
-     */
-    public function setDb($db): void
-    {
-        $this->db = $db;
-    }
+    public static function getInstance() {
+ 
+        if(is_null(self::$_instance)) {
+            self::$_instance = new DB();  
+        
+        }
+  
+        return self::$_instance;
+      }
+   
 
 
 
-    public function findAll(String $table){
+
+    public function findAll(string $table){
         try
         {
             $sqlQuery = 'SELECT * from '. $table;
+            
             $result = [];
-            foreach( $this->db->query($sqlQuery) as $row){
+ 
+            foreach(  $this->DB->query($sqlQuery) as $row){
                 array_push($result, $row);
             }
         }catch(PDOException $e){
             var_dump( "Erreur : " .$e->getMessage()."<br>");die;
         }
       
+        return $result ;
+       
+
+    }
+
+    public function findWhere(string $table, array $params){
+        try
+        {
+            $sqlQuery = 'SELECT * from '. $table . ' WHERE ';
+
+            foreach ($params as $param){
+                $sqlQuery.= key($params) ." = '" . $param . "'";
+            }
+            
+            $result = [];
+          
+            foreach(  $this->DB->query($sqlQuery) as $row){
+                array_push($result, $row);
+            }
+        }catch(PDOException $e){
+            "Erreur : " .$e->getMessage()."<br>";die;
+        }
+   
         return $result ;
        
 
