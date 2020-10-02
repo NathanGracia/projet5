@@ -14,7 +14,10 @@ class DB {
         $password ="";
         try
         {
-            $db = new PDO ('mysql:host=localhost;dbname=projet5', $user, $password);
+            $db = new PDO ('mysql:host=localhost;dbname=projet5', $user, $password, [
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION 
+            ]);
         }catch(PDOException $e){
             print "Erreur : " .$e->getMessage()."<br>";die;
         }
@@ -37,7 +40,7 @@ class DB {
 
 
 
-    public function findAll(string $table){
+   /*  public function findAll(string $table){
         try
         {
             $sqlQuery = 'SELECT * from '. $table;
@@ -77,7 +80,7 @@ class DB {
         return $result ;
        
 
-    }
+    } */
 
     
 }

@@ -12,7 +12,9 @@ abstract class Routes implements IRoutes
     {
         return [
             new Route('/article', ArticleController::class, 'showAction'),
+            new Route('/article/comment/create', CommentController::class, 'create'),
             new Route('/article/{slug}', ArticleController::class, 'showAction'),
+            new Route('/articles', ArticleController::class, 'indexAction'),
             new Route('/articles', ArticleController::class, 'indexAction'),
         ];
     }
