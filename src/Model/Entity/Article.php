@@ -13,6 +13,8 @@ class Article
     private $created_at;
     
     private $content;
+
+    private $image_url;
     
     private $slug;
     
@@ -22,27 +24,7 @@ class Article
 
 
 
-    /**
-     * Book constructor.
-     * @param $id
-     * @param $author
-     * @param $created_at
-     * @param $content
-     * @param $slug
-     * @param $title
-     */
 
-
-    public function __construct($id, $author, $created_at, $content, $slug, $title)
-    {
-        $this->id = $id;
-        $this->author = $author;
-        $this->created_at = $created_at;
-        $this->content = $content;
-        $this->slug = $slug;
-        $this->title = $title;
-       
-    }
     
     /**
      * @return mixed
@@ -138,6 +120,22 @@ class Article
     public function setSlug($slug): void
     {
         $this->slug = $slug;
+    }
+
+     /**
+     * @return mixed
+     */
+    public function getImage_url()
+    {
+        return $this->image_url;
+    }
+
+    /**
+     * @param mixed $image_url
+     */
+    public function setImage_url($image_url): void
+    {
+        $this->image_url = $image_url;
     }
     
      /**

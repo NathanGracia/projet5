@@ -64,4 +64,39 @@ abstract class ARepository
 
         return $result [0];
     }
+
+    public function Insert(array $values)
+    {
+        $sql = 'INSERT INTO ' . $this->getEntityClass() . " ( ";
+        $first = true;
+        foreach($values as $column => $value){
+            if (!$first) {
+                $sql .= ' , ';
+            }
+            $sql .= $column;
+
+            $first = false;
+
+        }
+
+        $sql .= " ) VALUES ( ";
+
+        $first = true;
+        $parameters = [];
+        foreach($values as $column => $value){
+            if (!$first) {
+                $sql .= ' , ';
+            }
+            $sql .= " ? ";
+            array_push($parameters, $value);
+            $first = false;
+
+        }
+        
+        $sql .= ")";
+
+     
+        return Database::getDatabase()->query($sql, $parameters, null, false);
+
+    }
 }

@@ -1,8 +1,16 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_errors', 'on');
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 use Core\Router\Router;
 
 require_once '../vendor/autoload.php';
+
+$whoops = new \Whoops\Run;
+$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+$whoops->register();
 
 $url = $_SERVER['PATH_INFO'] ?? 'default/index';
 
@@ -22,14 +30,14 @@ if (!$routeTarget) {
 $controllerName = $routeTarget->getControllerClass();
 
 if (!class_exists($controllerName)) {
-    die ('500');
+    die ($controllerName);
 }
 
 $controller = new $controllerName();
 $actionName = $routeTarget->getActionName();
 
 if (!method_exists($controller, $actionName)) {
-    die ('500');
+    die ('aaa');
 }
 
 $controller->$actionName($routeTarget->getParameters());

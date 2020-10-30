@@ -3,6 +3,7 @@
 namespace Core\Database;
 
 use PDO;
+use  App\Config\Config;
 
 class Database
 {
@@ -12,11 +13,13 @@ class Database
 
     private function __construct()
     {
-        $user = "root";
-        $password ="";
+        $user = Config::DB_USER;
+        $password = Config::DB_PASSWORD;
+        $host = Config::DB_HOST;
         try
         {
-            $this->db = new PDO ('mysql:host=localhost;dbname=projet5', $user, $password, [
+   
+            $this->db = new PDO ('mysql:host='.$host.';dbname=projet5', $user, $password, [
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION 
             ]);
@@ -34,7 +37,7 @@ class Database
         return self::$instance;
     }
 
-    public function query(string $statement, array $parameters = [], string $classFQN = null, bool $oneResult = false)
+    public function query(string $statement, array $parameters = [], string $classFQN = null,bool $result = true,  bool $oneResult = false)
     {
         $request = $this->db->prepare($statement);
 
@@ -47,7 +50,9 @@ class Database
         if ($oneResult) {
             return $request->fetch();
         }
-
-        return $request->fetchAll();
+        if ($result) {
+            return $request->fetchAll();
+        }
+ 
     }
 }

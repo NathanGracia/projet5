@@ -3,6 +3,7 @@
 namespace App\Config;
 
 use App\Controller\ArticleController;
+use App\Controller\CommentController;
 use Core\Router\IRoutes;
 use Core\Router\Route;
 
@@ -12,10 +13,12 @@ abstract class Routes implements IRoutes
     {
         return [
             new Route('/article', ArticleController::class, 'showAction'),
-            new Route('/article/comment/create', CommentController::class, 'create'),
+            new Route('/article/nouveau', ArticleController::class, 'create'),
+            new Route('/article/edit/{slug}', ArticleController::class, 'edit'),
             new Route('/article/{slug}', ArticleController::class, 'showAction'),
             new Route('/articles', ArticleController::class, 'indexAction'),
-            new Route('/articles', ArticleController::class, 'indexAction'),
+
+            new Route('/comment/create', CommentController::class, 'createComment'),
         ];
     }
 }

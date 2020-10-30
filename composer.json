@@ -14,5 +14,8 @@
             "Core\\": "core",
             "App\\": "src"
         }
+    },
+    "require-dev": {
+        "filp/whoops": "^2.7"
     }
 }

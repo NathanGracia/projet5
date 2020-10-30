@@ -17,27 +17,13 @@ class Comment
     
     private $title;
 
+    private $id_article;
 
 
 
 
-    /**
-     * Book constructor.
-     * @param $id
-     * @param $author
-     * @param $created_at
-     * @param $content
-     */
 
 
-    public function __construct($id, $author, $created_at, $content, $slug, $title)
-    {
-        $this->id = $id;
-        $this->author = $author;
-        $this->created_at = $created_at;
-        $this->content = $content;
-       
-    }
     
     /**
      * @return mixed
@@ -101,6 +87,22 @@ class Comment
     public function setContent($content): void
     {
         $this->content = $content;
+    }
+
+     /**
+     * @return mixed
+     */
+    public function getIdArticle()
+    {
+        return $this->id_article;
+    }
+
+    /**
+     * @param mixed $id_article
+     */
+    public function setIdArticle($id_article): void
+    {
+        $this->id_article = $id_article;
     }
     
  
