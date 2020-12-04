@@ -61,12 +61,14 @@
                 <a href="#" class="d-inline-block p-3"><span class="icon-twitter"></span></a>
                 <a href="#" class="d-inline-block p-3"><span class="icon-instagram"></span></a>
             </div>
-             <div class="ml-md-auto top-social d-none d-lg-inline-block">
-              <a href="#" class="d-inline-block p-3"><span class=></span></a>
-                <a href="#" class="d-inline-block p-3"><span class="icon-twitter"></span></a>
-                <a href="#" class="d-inline-block p-3"><span class="icon-instagram"></span></a>
+          
+           
+            {% if not user() is same as(null)  %}
+            <div class="ml-md-auto top-social d-none d-lg-inline-block">
+                <a href="/profil" class="d-inline-block p-3"><span class=>{{ user().name }}</span></a>
+                
             </div>
-            
+            {% endif %}
             
           </div>
           <div class="col-6 d-block d-lg-none text-right">

@@ -57,10 +57,9 @@ class UserController extends AController
                 if(password_verify($user->getPassword(),$userFromBDD['password'])){
                     $_SESSION['user'] = $userFromBDD;
 
-                    header('Location: /utilisateurs/'.$userFromBDD['id']); 
+                    header('Location: /profil'); 
                 }else{
-                    dump(password_hash('1234', PASSWORD_BCRYPT));
-                    dd($userFromBDD['password']);
+                    dd('mauvais ids');
                 }
 
             }
@@ -129,9 +128,10 @@ class UserController extends AController
         
     }
 
-    public function show($id){
-        $user =  $this->userRepository->findOneBy(['id'=>$id]);
-        echo('<h1> Page de l\'utilisateur </h1>');
-        dump($user);
+    public function profil(){
+        $user =  $_SESSION['user'];
+        $this->render('user/show.html.twig', [
+            'user' => $user
+        ]);
     }
 }

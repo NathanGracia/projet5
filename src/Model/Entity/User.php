@@ -39,7 +39,7 @@ class User
     /**
      * @return mixed
      */
-    public function getname()
+    public function getName()
     {
         return $this->name;
     }
@@ -47,7 +47,7 @@ class User
     /**
      * @param mixed $name
      */
-    public function setname($name): void
+    public function setName($name): void
     {
         $this->name = $name;
     }

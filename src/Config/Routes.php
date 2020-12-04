@@ -25,7 +25,8 @@ abstract class Routes implements IRoutes
             new Route('/comment/create', CommentController::class, 'createComment'),
             new Route('/contact', ContactController::class, 'contactForm'),
 
-            new Route('/utilisateurs/{slug}', ArticleController::class, 'showAction'),
+            new Route('/utilisateurs/{slug}', UserController::class, 'show'),
+            new Route('/profil', UserController::class, 'profil'),
 
         ];
     }

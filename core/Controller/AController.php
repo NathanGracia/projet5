@@ -34,6 +34,22 @@ abstract class AController
                }
             } )
         );
+        $twig->addFunction(
+            new TwigFunction('user', function(){
+               if(isset($_SESSION['user'])){
+                return $_SESSION['user'];
+               }else{
+                   return null;
+               }
+                
+            } )
+        );
+        $twig->addFunction(
+            new TwigFunction('isAdmin', function($user){
+             return true;
+                
+            } )
+        );
         echo $twig->render($name, $context);
     }
 }
