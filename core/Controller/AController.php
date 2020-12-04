@@ -3,6 +3,7 @@
 namespace Core\Controller;
 
 use Twig\Environment;
+use Twig\TwigFunction;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -26,7 +27,13 @@ abstract class AController
         $twig = new Environment($loader, [
 //            'cache' => '../var/cache'
         ]);
-
+        $twig->addFunction(
+            new TwigFunction('dump', function(...$vars){
+               foreach( $vars as $var){
+                   dump($var);
+               }
+            } )
+        );
         echo $twig->render($name, $context);
     }
 }

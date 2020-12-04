@@ -8,6 +8,7 @@ use Core\Router\Router;
 
 require_once '../vendor/autoload.php';
 
+session_start();
 $whoops = new \Whoops\Run;
 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
@@ -37,7 +38,7 @@ $controller = new $controllerName();
 $actionName = $routeTarget->getActionName();
 
 if (!method_exists($controller, $actionName)) {
-    die ('aaa');
+    die ('method does not exist');
 }
 
 $controller->$actionName($routeTarget->getParameters());

@@ -10,11 +10,14 @@ use  App\Model\Entity\Article;
 use  App\Model\Entity\Comment;
 use App\Repository\ArticleRepository;
 use App\Repository\CommentRepository;
+use App\Repository\UserRepository;
 use Core\Form\Constraint\NotEmptyConstraint;
 use Core\Form\Constraint\NotNullConstraint;
+use Core\Form\Constraint\ValidCsrfConstraint;
 use Core\Form\Form;
 use Core\Form\Type\TextType;
-
+use Core\Form\Type\CsrfType;
+use Ramsey\Uuid;
 
 
 class ArticleController extends AController
@@ -27,11 +30,13 @@ class ArticleController extends AController
      * @var CommentRepository
      */
     private  $commentRepository;
+ 
 
     public function __construct()
     {
         $this->articleRepository = new ArticleRepository();
         $this->commentRepository = new CommentRepository();
+     
     }
     
 
@@ -63,15 +68,15 @@ class ArticleController extends AController
 
                //commentaires :
                $comments = [];
-            foreach($bddComments as $comment){
+            foreach($bddComments as $bddComment){
 
                 $comment = new Comment();
 
-                $comment->setId($comment['id']);
-                $comment->setId_author($comment['id_author']);
-                $comment->setContent($comment['content']);
-                $comment->setCreated_at($comment['created_at']);
-                $comment->setId_article($comment['id_article']);
+                $comment->setId($bddComment['id']);
+                $comment->setId_author($bddComment['id_author']);
+                $comment->setContent($bddComment['content']);
+                $comment->setCreated_at($bddComment['created_at']);
+                $comment->setId_article($bddComment['id_article']);
                
                 array_push($comments, $comment);
             }
@@ -105,24 +110,8 @@ class ArticleController extends AController
     }
 
     public function create(){
-       /*  $content = htmlspecialchars( $_POST['content']);
-        $title = htmlspecialchars($_POST['title']);
-        $image_url = htmlspecialchars($_POST['image_url']);
 
-        $slug = str_replace(" ", "-", $title);
-
-        if(!empty($title) && !empty($content)){
-            $this->articleRepository->insert([
-           
-                'content' => $content,
-                'image_url' => $image_url,
-                'title' => $title,
-                'slug' => $slug
-
-            ]);
-            header('Location: /articles'); 
-        } */
-
+        
         $article = new Article();
 
         $form = new Form([
@@ -134,20 +123,20 @@ class ArticleController extends AController
             'content' => new TextType([
                 new NotNullConstraint(),
                 new NotEmptyConstraint()
+            ]),
+            '_csrf' => new CsrfType([
+                new ValidCsrfConstraint()
             ])
         ], $article);
 
         $form->handleRequest();
-     
+   
         if ($form->isSubmitted() && $form->isValid()) {
 
             $slug = strtolower(str_replace(" ", "-", $article->getTitle()));
             $article->setSlug($slug);
 
-            if(empty($article->getImage_url())){
-                $defaultImageUrl = "https://www.trekmag.com/media/news/2018/12/DSCF0620.jpg";
-                $article->setImage_url($defaultImageUrl);
-            }
+           
            
             //envoie en bdd
             $this->articleRepository->insert([

@@ -36,6 +36,7 @@ class Form
         foreach ($this->parts as $name => $type) {
             foreach ($type->getConstraints() as $constraint) {
                 if (!$constraint->isValid($type->getValue())) {
+                    dump($constraint);
                     return false;
                 }
             }
@@ -61,5 +62,9 @@ class Form
     public function getData()
     {
         return $this->datas;
+    }
+
+    public function getParts(){
+        return $this->parts;
     }
 }

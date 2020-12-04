@@ -7,7 +7,7 @@ class Comment
     
     private $id;
     
-    private $author;
+    private $id_id_author;
     
     private $created_at;
     
@@ -44,17 +44,17 @@ class Comment
     /**
      * @return mixed
      */
-    public function getAuthor()
+    public function getId_author()
     {
-        return $this->author;
+        return $this->id_author;
     }
 
     /**
-     * @param mixed $author
+     * @param mixed $id_author
      */
-    public function setAuthor($author): void
+    public function setId_author($id_author): void
     {
-        $this->author = $author;
+        $this->id_author = $id_author;
     }
     
     /**
@@ -92,7 +92,7 @@ class Comment
      /**
      * @return mixed
      */
-    public function getIdArticle()
+    public function getId_article()
     {
         return $this->id_article;
     }
@@ -100,7 +100,7 @@ class Comment
     /**
      * @param mixed $id_article
      */
-    public function setIdArticle($id_article): void
+    public function setId_article($id_article): void
     {
         $this->id_article = $id_article;
     }
