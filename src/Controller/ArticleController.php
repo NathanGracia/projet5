@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Model\Entity\User;
 use Core\Controller\AController;
 use Core\Model\DB;
 use  App\Model\Entity\Article;
@@ -30,13 +31,18 @@ class ArticleController extends AController
      * @var CommentRepository
      */
     private  $commentRepository;
- 
+    /**
+     * @var UserRepository
+     */
+    private UserRepository $userRepository;
+
 
     public function __construct()
     {
         $this->articleRepository = new ArticleRepository();
         $this->commentRepository = new CommentRepository();
-     
+        $this->userRepository = new UserRepository();
+
     }
     
 
@@ -59,14 +65,27 @@ class ArticleController extends AController
             $article = new Article();
 
             $article->setId($result['id']);
-            $article->setAuthor(null);
+            $article->setIdAuthor($result['id_author']);
             $article->setCreated_at(null);
             $article->setContent($result['content']);
             $article->setSlug($result['slug']);
             $article->setTitle($result['title']);
             $article->setImage_url($result['image_url']);
 
-               //commentaires :
+
+            //query select *
+            $authorResult =  $this->userRepository->findOneBy(['id'=>$article->getIdAuthor()]);
+
+            if(empty($result)){
+               $author = null;
+            }else{
+                $author = new User();
+                $author->setId($authorResult['id']);
+                $author->setName($authorResult['name']);
+                $author->setEmail($authorResult['email']);
+            }
+
+            //commentaires :
                $comments = [];
             foreach($bddComments as $bddComment){
 
@@ -85,6 +104,7 @@ class ArticleController extends AController
           
             $this->render('article/show.html.twig', [
                 "article" => $article,
+                "author" => $author,
                 "comments" => $comments
             ]);
         }else{

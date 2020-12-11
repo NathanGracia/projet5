@@ -8,7 +8,7 @@ class Article
     private static $table  = "article";
     private $id;
     
-    private $author;
+    private $idAuthor;
     
     private $created_at;
     
@@ -45,17 +45,17 @@ class Article
     /**
      * @return mixed
      */
-    public function getAuthor()
+    public function getIdAuthor()
     {
-        return $this->author;
+        return $this->idAuthor;
     }
 
     /**
-     * @param mixed $author
+     * @param mixed $idAuthor
      */
-    public function setAuthor($author): void
+    public function setIdAuthor($idAuthor): void
     {
-        $this->author = $author;
+        $this->idAuthor = $idAuthor;
     }
     
     /**
