@@ -27,14 +27,16 @@ class CommentController extends AController
     public function createComment(){
         $content = htmlspecialchars( $_POST['content']);
         $id_article = htmlspecialchars($_POST['id_article']);
+        $id_author = htmlspecialchars($_POST['id_author']);
         if(!empty($content) && !empty($id_article)){
             $this->commentRepository->insert([
            
                 'content' => $content,
-                'id_article' => $id_article
+                'id_article' => $id_article,
+                'id_author' => $id_author
             ]);
         }
-    
+
         header('Location: /article/'.$_POST['slug_article']);
     }
 
