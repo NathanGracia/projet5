@@ -39,7 +39,7 @@ class Article
      */
     public function setId($id): void
     {
-        $this->name = $id;
+        $this->id = $id;
     }
     
     /**

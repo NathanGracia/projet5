@@ -2,12 +2,13 @@
 
 namespace App\Model\Entity;
 
+use App\Repository\UserRepository;
 class Comment
 {
     
     private $id;
     
-    private $id_id_author;
+    private $id_author;
     
     private $created_at;
     
@@ -18,6 +19,7 @@ class Comment
     private $title;
 
     private $id_article;
+
 
 
 
@@ -104,6 +106,17 @@ class Comment
     {
         $this->id_article = $id_article;
     }
+
+    public function getAuthor(){
+        if(empty($this->author)){
+            $userRepository = new UserRepository();
+            $this->author =  $userRepository->findOneBy(['id'=> $this->getId_author()]);
+        }
+
+        return $this->author;
+    }
+
+
     
  
 
