@@ -68,6 +68,10 @@
                 <a href="/profil" class="d-inline-block p-3"><span class=>{{ user().name }}</span></a>
                 
             </div>
+            {% else %}
+              <div class="ml-md-auto top-social d-none d-lg-inline-block">
+                <a href="/connection" class="d-inline-block p-3"><span class=>Se connecter</span></a>
+              </div>
             {% endif %}
             
           </div>
