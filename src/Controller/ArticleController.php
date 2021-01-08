@@ -97,7 +97,7 @@ class ArticleController extends AController
                 $comment->setContent($bddComment['content']);
                 $comment->setCreated_at($bddComment['created_at']);
                 $comment->setId_article($bddComment['id_article']);
-               
+         
                 array_push($comments, $comment);
             }
 

@@ -28,12 +28,15 @@ class CommentController extends AController
         $content = htmlspecialchars( $_POST['content']);
         $id_article = htmlspecialchars($_POST['id_article']);
         $id_author = htmlspecialchars($_POST['id_author']);
+        $created_at = $timestamp = date('Y-m-d H:i:s');
+
         if(!empty($content) && !empty($id_article)){
             $this->commentRepository->insert([
            
                 'content' => $content,
                 'id_article' => $id_article,
-                'id_author' => $id_author
+                'id_author' => $id_author,
+                'created_at' => $created_at
             ]);
         }
 
