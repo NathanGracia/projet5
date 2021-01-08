@@ -45,10 +45,13 @@
                                     <div class="comment-body">
                                         {% if not comment.getAuthor() is same as(null)  %}
                                         <h3>{{ comment.getAuthor().name }}</h3>
+                                      
                                         {% else %}
                                             <h3> Invité </h3>
-                                            {% endif %}
-
+                                        {% endif %}
+                             
+                                        <span class="date-read">{{ comment.getCreated_at() }}</span>
+                                   
                                         <p>{{ comment.content }}</p>
                                     </div>
                                 </li>

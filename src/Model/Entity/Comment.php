@@ -20,6 +20,8 @@ class Comment
 
     private $id_article;
 
+    private $date;
+
 
 
 
@@ -90,6 +92,8 @@ class Comment
     {
         $this->content = $content;
     }
+
+
 
      /**
      * @return mixed
