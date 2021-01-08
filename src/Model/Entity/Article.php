@@ -20,6 +20,8 @@ class Article
     
     private $title;
 
+    private $date;
+
 
 
 
@@ -136,6 +138,22 @@ class Article
     public function setImage_url($image_url): void
     {
         $this->image_url = $image_url;
+    }
+
+       /**
+     * @return mixed
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param mixed $date
+     */
+    public function setDate($date): void
+    {
+        $this->date = $date;
     }
     
      /**

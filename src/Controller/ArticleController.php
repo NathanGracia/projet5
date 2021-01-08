@@ -71,7 +71,8 @@ class ArticleController extends AController
             $article->setSlug($result['slug']);
             $article->setTitle($result['title']);
             $article->setImage_url($result['image_url']);
-
+            $article->setDate($result['date']);
+            
 
             //query select *
             $authorResult =  $this->userRepository->findOneBy(['id'=>$article->getIdAuthor()]);
@@ -156,6 +157,12 @@ class ArticleController extends AController
             $slug = strtolower(str_replace(" ", "-", $article->getTitle()));
             $article->setSlug($slug);
 
+            $date = $timestamp = date('Y-m-d H:i:s');
+            $article->setDate($date);
+
+            $idAuthor = $_SESSION['user']['id'];
+            $article->setIdAuthor($idAuthor);
+
            
            
             //envoie en bdd
@@ -164,7 +171,9 @@ class ArticleController extends AController
                 'content' => $article->getContent(),
                 'image_url' => $article->getImage_url(),
                 'title' => $article->getTitle(),
-                'slug' => $article->getSlug()
+                'slug' => $article->getSlug(),
+                'date' => $article->getDate(),
+                'id_author' => $article->getIdAuthor()
 
             ]);
          
