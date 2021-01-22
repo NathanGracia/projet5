@@ -17,6 +17,7 @@ abstract class Routes implements IRoutes
             new Route('/article', ArticleController::class, 'showAction'),
             new Route('/article/nouveau', ArticleController::class, 'create'),
             new Route('/article/edit/{slug}', ArticleController::class, 'edit'),
+            new Route('/article/delete/{id}', ArticleController::class, 'delete'),
             new Route('/article/{slug}', ArticleController::class, 'showAction'),
             new Route('/articles', ArticleController::class, 'indexAction'),
             new Route('/connection', UserController::class, 'login'),

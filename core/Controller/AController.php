@@ -2,6 +2,8 @@
 
 namespace Core\Controller;
 
+use App\Model\Entity\User;
+use App\Repository\UserRepository;
 use Twig\Environment;
 use Twig\TwigFunction;
 use Twig\Error\LoaderError;
@@ -11,6 +13,32 @@ use Twig\Loader\FilesystemLoader;
 
 abstract class AController
 {
+
+    private $userRepository;
+
+    public function __construct()
+    {
+        $this->userRepository = new UserRepository();
+    }
+
+    /**
+     * @return UserRepository
+     */
+    public function getUserRepository(): UserRepository
+    {
+        if(!isset($this->userRepository)){
+            $this->setUserRepository(new UserRepository());
+        }
+        return $this->userRepository;
+    }
+
+    /**
+     * @param UserRepository $userRepository
+     */
+    public function setUserRepository(UserRepository $userRepository): void
+    {
+        $this->userRepository = $userRepository;
+    }
     /**
      * Render the view
      *
@@ -37,7 +65,16 @@ abstract class AController
         $twig->addFunction(
             new TwigFunction('user', function(){
                if(isset($_SESSION['user'])){
-                return $_SESSION['user'];
+                   $userResult = $this->getUserRepository()->findOneBy(['id'=> $_SESSION['user']['id']]);
+                    $user = new User();
+
+                   $user->setId($userResult['id']);
+                   $user->setRole($userResult['role']);
+                   $user->setEmail($userResult['email']);
+                   $user->setName($userResult['name']);
+
+
+                   return $user;
                }else{
                    return null;
                }
@@ -46,10 +83,20 @@ abstract class AController
         );
         $twig->addFunction(
             new TwigFunction('isAdmin', function($user){
-             return true;
-                
+                if(!empty($user)){
+                    return $user->isAdmin();  true;
+                }else{
+                    return false;
+                }
+
+
             } )
         );
         echo $twig->render($name, $context);
+    }
+    public function redirectTo($url){
+        header('Location: '.$url);
+        die();
+
     }
 }

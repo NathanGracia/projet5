@@ -40,7 +40,8 @@ class CommentController extends AController
             ]);
         }
 
-        header('Location: /article/'.$_POST['slug_article']);
+
+        $this->redirectTo('/article/'.$_POST['slug_article']);
     }
 
    

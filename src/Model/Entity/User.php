@@ -10,8 +10,10 @@ class User
     private $name;
     
     private $password;
-    
+
     private $email;
+
+    private $role;
     
 
 
@@ -84,6 +86,25 @@ class User
         $this->email = $email;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param mixed $role
+     */
+    public function setRole($role): void
+    {
+        $this->role = $role;
+    }
+
+    public function isAdmin(){
+        return $this->role == "admin";
+    }
    
 
 
