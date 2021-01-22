@@ -55,4 +55,9 @@ class Database
         }
  
     }
+
+    public function queryWithoutResult(string $statement, array $parameters = []){
+        $this->query($statement,$parameters,null,false);
+
+    }
 }

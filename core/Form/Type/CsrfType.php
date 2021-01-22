@@ -8,14 +8,17 @@ use Ramsey\Uuid\Uuid;
 
 class CsrfType extends AFormType
 {
+    private static $token;
     public function generate(): string {
-        $csrf = [
-            'token' => Uuid::uuid4()->toString(),
-            'createdAt' => new DateTime()
-        ];
+        if(!isset(self::$token)){
+            self::$token = Uuid::uuid4()->toString();
 
-        $_SESSION['_csrf'] = $csrf;
-     
-        return $csrf['token'];
+            $_SESSION['_csrf'] = [
+                'token' => self::$token,
+                'createdAt' => new DateTime()
+            ];
+        }
+
+        return self::$token;
     }
 }

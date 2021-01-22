@@ -122,7 +122,7 @@ class Contact
 
 
  
-    public function sendMail(){
+    public function sendMail($mail, $name, $content){
         // Create the Transport
         $transport = (new \Swift_SmtpTransport('smtp.gmail.com', 465, "ssl"))
         ->setUsername('nathan.gracia.863@gmail.com')
@@ -133,10 +133,11 @@ class Contact
         $mailer = new \Swift_Mailer($transport);
 
         // Create a message
-        $message = (new \Swift_Message('Wonderful Subject'))
-        ->setFrom(['nathan.gracia.863@gmail.com' => 'Le Boss'])
+        $message = (new \Swift_Message('Message de : ' . $name))
+        ->setFrom($mail)
+        ->setReplyTo($mail)
         ->setTo(['nathan.gracia.863@gmail.com'])
-        ->setBody('Here is the message itself')
+        ->setBody($content)
         ;
 
         // Send the message

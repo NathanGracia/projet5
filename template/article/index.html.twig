@@ -18,8 +18,11 @@
                 <p class="mb-3">{{ article.content|slice(0,250) }}...</p>
                 <div class="post-meta">
                   <span class="date-read">{{ article.date }}</span>
+
                   {% if isAdmin(user()) %}
-                  <a href="#"><span class="" style="color: red;">Supprimer</span></a>
+                  <form action="/article/delete/{{ article.id }}" method="POST" >
+                    <button type="submit" class="btn btn-link text-danger " onClick="return confirm('Voulez vous supprimer cet article ?')" style="font-size: 12px; padding: 0px"><span >Supprimer</span></button>
+                  </form>
                   {% endif %}
                 </div>
               </div>

@@ -176,8 +176,8 @@ class ArticleController extends AController
                 'id_author' => $article->getIdAuthor()
 
             ]);
-         
-             header('Location: /article/'.$slug); 
+            $this->redirectTo('/article/'.$slug);
+
         }
         $this->render('article/new.html.twig', [
             'form' => $form
@@ -201,6 +201,20 @@ class ArticleController extends AController
         $this->render('article/edit.html.twig', [
             'article' => $article
         ]);
+    }
+    public function delete($params){
+      
+        if(empty($_SESSION["user"] ) || $_SESSION["user"]["role"] != "admin" ){
+            die('419');
+        }
+      
+        $this->articleRepository->deleteBy(['id' => $params['id']]);
+       
+
+
+        $this->redirectTo('/articles');
+
+
     }
 
 

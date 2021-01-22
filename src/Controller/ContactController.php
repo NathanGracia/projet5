@@ -35,7 +35,11 @@ class ContactController extends AController
         $form->handleRequest();
      
         if ($form->isSubmitted() && $form->isValid()) {
-            $contact->sendMail();
+      
+            $mail = $contact->getMail();
+            $name = $contact->getName();
+            $content = $contact->getContent();
+            $contact->sendMail($mail, $name, $content);
 
             var_dump("mail envoyé ?");die;
         }

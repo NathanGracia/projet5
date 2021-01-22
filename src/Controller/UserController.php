@@ -10,6 +10,7 @@ use Core\Form\Form;
 use Core\Form\Type\TextType;
 use App\Repository\UserRepository;
 use Core\Form\Constraint\NotEmptyConstraint;
+use App\Repository\CommentRepository;
 use Core\Form\Constraint\NotNullConstraint;
 use Core\Form\Type\CsrfType;
 use Core\Form\Constraint\ValidCsrfConstraint;
@@ -22,8 +23,15 @@ class UserController extends AController
      */
     private  $userRepository;
 
+          /**
+     * @var CommentRepository
+     */
+    private  $commentRepository;
+
+
     public function __construct(){
         $this->userRepository = new UserRepository();
+        $this->commentRepository = new CommentRepository();
     }
 
 
@@ -57,7 +65,7 @@ class UserController extends AController
                 if(password_verify($user->getPassword(),$userFromBDD['password'])){
                     $_SESSION['user'] = $userFromBDD;
 
-                    header('Location: /profil'); 
+                    $this->redirectTo('/profil');
                 }else{
                     dd('mauvais ids');
                 }
@@ -130,8 +138,11 @@ class UserController extends AController
 
     public function profil(){
         $user =  $_SESSION['user'];
+        $commments = $this->commentRepository->findBy(['id_author'=> $user['id']]); 
+    
         $this->render('user/show.html.twig', [
-            'user' => $user
+            'user' => $user,
+            'comments' => $commments
         ]);
     }
 }

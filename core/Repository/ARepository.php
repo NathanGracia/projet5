@@ -99,4 +99,32 @@ abstract class ARepository
         return Database::getDatabase()->query($sql, $parameters, null, false);
 
     }
+
+    public function deleteBy(array $criteria){
+        $parameters = [];
+
+        $whereSql = '';
+        if (count($criteria) > 0) {
+            $whereSql = ' WHERE ';
+
+            $first = true;
+            foreach ($criteria as $column => $value) {
+                if (!$first) {
+                    $whereSql .= ' AND ';
+                }
+                $whereSql .= '`' . $column . '`' . '=:' . 'where_' . $column . '';
+                $parameters['where_' . $column] = $value;
+
+                $first = false;
+            }
+        }
+
+
+
+        $sql = 'DELETE FROM ' . $this->getEntityClass() . $whereSql ;
+
+        Database::getDatabase()->queryWithoutResult( $sql,$parameters);
+
+
+    }
 }
