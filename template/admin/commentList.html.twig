@@ -1,0 +1,33 @@
+{% extends "base.html.twig" %}
+{% block body %}
+
+    <div class="site-section">
+        <div class="container">
+            {% for comment in comments %}
+                <div class="card col-md-12" style=" margin: 2%">
+                    <div class="card-body col-md-12">
+                        <h5 class="card-title">Auteur : {{ comment.author.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ comment.created_at }}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">Article commenté : {{ comment.article.title }}</h6>
+                        <p class="card-text">{{ comment.content }}</p>
+                        <form action="/comment/delete/{{ comment.id }}" method="POST">
+                            <button type="submit" class="btn btn-link text-danger "
+                                    onClick="return confirm('Voulez vous supprimer ce commentaire ?')"
+                                    style="font-size: 12px; padding: 0px"><span>Supprimer</span></button>
+                        </form>
+                        <form action="/comment/approve/{{ comment.id }}" method="POST">
+                            <button type="submit" class="btn btn-link text-info "
+                                    onClick="return confirm('Voulez vous approuver ce commentaire ?')"
+                                    style="font-size: 12px; padding: 0px"><span>Approuver</span></button>
+                        </form>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+
+
+
+{% endblock %}
