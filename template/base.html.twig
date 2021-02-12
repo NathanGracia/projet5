@@ -96,9 +96,16 @@
                 <li>
                   <a href="/articles" class="nav-link text-left">Articles</a>
                 </li>
+                <li>
+                  <a href="/article/nouveau" class="nav-link text-left">Nouvel article</a>
+                </li>
        
                 <li><a href="/contact" class="nav-link text-left">Contact</a></li>
-              </ul>                                                                                                                                                                                                                                                                                         
+                {% if not user().role is same as(admin)  %}
+                  <li><a href="/administration/commentaires" class="nav-link text-left">Commentaires</a></li>
+                  <li><a href="/utilisateurs" class="nav-link text-left">Utilisateurs</a></li>
+                {% endif %}
+              </ul>
             </nav>
 
           </div>

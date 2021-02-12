@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Model\Entity\User;
 use Core\Controller\AController;
+use Core\Exception\Http\HttpNotFoundException;
 use Core\Model\DB;
 use  App\Model\Entity\Article;
 use  App\Model\Entity\Comment;
@@ -54,9 +55,9 @@ class ArticleController extends AController
         //query select * 
         $result =  $this->articleRepository->findOneBy(['slug'=>$slug]);
         if(empty($result)){
-            die('Article introuvable');
+           throw new HttpNotFoundException();
         }
-        $bddComments =  $this->commentRepository->findBy(['id_article'=> $result['id']]); 
+
     
    
         if(!is_null($result)){
@@ -88,6 +89,7 @@ class ArticleController extends AController
 
             //commentaires :
                $comments = [];
+            $bddComments =  $this->commentRepository->findBy(['id_article'=> $result['id'], 'approved' => '1']);
             foreach($bddComments as $bddComment){
 
                 $comment = new Comment();
@@ -205,7 +207,7 @@ class ArticleController extends AController
     public function delete($params){
       
         if(empty($_SESSION["user"] ) || $_SESSION["user"]["role"] != "admin" ){
-            die('419');
+            die('419'); //todo exception perm
         }
       
         $this->articleRepository->deleteBy(['id' => $params['id']]);

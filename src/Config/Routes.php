@@ -21,12 +21,22 @@ abstract class Routes implements IRoutes
             new Route('/article/{slug}', ArticleController::class, 'showAction'),
             new Route('/articles', ArticleController::class, 'indexAction'),
             new Route('/connection', UserController::class, 'login'),
+            new Route('/test', UserController::class, 'test'),
             new Route('/inscription', UserController::class, 'signin'),
+            new Route('/administration/commentaires', CommentController::class, 'indexAction'),
+            new Route('/comment/approve/{id}', CommentController::class, 'approve'),
+            new Route('/comment/delete/{id}', CommentController::class, 'delete'),
 
             new Route('/comment/create', CommentController::class, 'createComment'),
             new Route('/contact', ContactController::class, 'contactForm'),
 
-            new Route('/utilisateurs/{slug}', UserController::class, 'show'),
+            new Route('/utilisateurs', UserController::class, 'index'),
+            new Route('/utilisateur/nouveau', UserController::class, 'create'),
+            new Route('/utilisateur/supprimer/{id}', UserController::class, 'delete'),
+            new Route('/deconnection', UserController::class, 'unconnect'),
+            new Route('/utilisateur/validerCompte/{token}', UserController::class, 'validateAccount'),
+
+            new Route('/utilisateur/{id}', UserController::class, 'show'),
             new Route('/profil', UserController::class, 'profil'),
 
         ];

@@ -10,4 +10,6 @@ namespace App\Config;
     const DB_PASSWORD = '';
 
     const DB_HOST = 'localhost';
+
+    const DEBUG = true;
 }

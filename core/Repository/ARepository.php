@@ -65,7 +65,7 @@ abstract class ARepository
         return $result [0];
     }
 
-    public function Insert(array $values)
+    public function insert(array $values)
     {
         $sql = 'INSERT INTO ' . $this->getEntityClass() . " ( ";
         $first = true;
@@ -122,6 +122,50 @@ abstract class ARepository
 
 
         $sql = 'DELETE FROM ' . $this->getEntityClass() . $whereSql ;
+
+        Database::getDatabase()->queryWithoutResult( $sql,$parameters);
+
+
+    }
+
+    public function update(array $criteria, $setters){
+        $parameters = [];
+
+        $settersSql = '';
+        if (count($criteria) > 0) {
+            $settersSql = ' SET ';
+
+            $first = true;
+            foreach ($setters as $column => $value) {
+                if (!$first) {
+                    $settersSql .= ' , ';
+                }
+                $settersSql .= '`' . $column . '`' . '=:' . 'set_' . $column . '';
+                $parameters['set_' . $column] = $value;
+
+                $first = false;
+            }
+        }
+
+        $whereSql = '';
+        if (count($criteria) > 0) {
+            $whereSql = ' WHERE ';
+
+            $first = true;
+            foreach ($criteria as $column => $value) {
+                if (!$first) {
+                    $whereSql .= ' AND ';
+                }
+                $whereSql .= '`' . $column . '`' . '=:' . 'where_' . $column . '';
+                $parameters['where_' . $column] = $value;
+
+                $first = false;
+            }
+        }
+
+
+
+        $sql = 'UPDATE ' . $this->getEntityClass(). $settersSql . ' ' . $whereSql ;
 
         Database::getDatabase()->queryWithoutResult( $sql,$parameters);
 
