@@ -13,7 +13,7 @@ abstract class Explorer
     {
         try {
             if (is_array($tabOrObj)) {
-                return $tabOrObj[$key];
+                return $tabOrObj[$key] ?? $default;
             }
 
             if (!is_object($tabOrObj)) {

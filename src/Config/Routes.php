@@ -20,7 +20,7 @@ abstract class Routes implements IRoutes
             new Route('/article/delete/{id}', ArticleController::class, 'delete'),
             new Route('/article/{slug}', ArticleController::class, 'showAction'),
             new Route('/articles', ArticleController::class, 'indexAction'),
-            new Route('/connection', UserController::class, 'login'),
+            new Route('/connexion', UserController::class, 'login'),
             new Route('/test', UserController::class, 'test'),
             new Route('/inscription', UserController::class, 'signin'),
             new Route('/administration/commentaires', CommentController::class, 'indexAction'),
@@ -31,6 +31,7 @@ abstract class Routes implements IRoutes
             new Route('/contact', ContactController::class, 'contactForm'),
 
             new Route('/utilisateurs', UserController::class, 'index'),
+            new Route('/utilisateur/passerAdministrateur/{id}', UserController::class, 'toAdmin'),
             new Route('/utilisateur/nouveau', UserController::class, 'create'),
             new Route('/utilisateur/supprimer/{id}', UserController::class, 'delete'),
             new Route('/deconnection', UserController::class, 'unconnect'),

@@ -22,6 +22,63 @@ abstract class AController
     }
 
     /**
+     * @param string $name
+     * @param array $context
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function render(string $name, array $context): string
+    {
+        $loader = new FilesystemLoader('../template');
+        $twig = new Environment($loader, [
+//            'cache' => '../var/cache'
+        ]);
+        $twig->addFunction(
+            new TwigFunction('dump', function (...$vars) {
+                foreach ($vars as $var) {
+                    dump($var);
+                }
+            })
+        );
+        $twig->addFunction(
+            new TwigFunction('user', function () {
+                if (isset($_SESSION['user'])) {
+                    $userResult = $this->getUserRepository()->findOneBy(['id' => $_SESSION['user']['id']]);
+                    $user = new User();
+
+                    $user->setId($userResult['id']);
+                    $user->setRole($userResult['role']);
+                    $user->setEmail($userResult['email']);
+                    $user->setName($userResult['name']);
+
+
+                    return $user;
+                } else {
+                    return null;
+                }
+
+            })
+        );
+        $twig->addFunction(
+            new TwigFunction('isAdmin', function ($user) {
+                if (!empty($user)) {
+                    return $user->isAdmin();
+                    true;
+                } else {
+                    return false;
+                }
+
+
+            })
+        );
+
+        $render = $twig->render($name, $context);
+        return $render;
+    }
+
+    /**
      * @return UserRepository
      */
     public function getUserRepository(): UserRepository
@@ -49,50 +106,9 @@ abstract class AController
      * @throws SyntaxError  When an error occurred during compilation
      * @throws RuntimeError When an error occurred during rendering
      */
-    protected function render(string $name, array $context = [])
+    protected function displayRender(string $name, array $context = [])
     {
-        $loader = new FilesystemLoader('../template');
-        $twig = new Environment($loader, [
-//            'cache' => '../var/cache'
-        ]);
-        $twig->addFunction(
-            new TwigFunction('dump', function(...$vars){
-               foreach( $vars as $var){
-                   dump($var);
-               }
-            } )
-        );
-        $twig->addFunction(
-            new TwigFunction('user', function(){
-               if(isset($_SESSION['user'])){
-                   $userResult = $this->getUserRepository()->findOneBy(['id'=> $_SESSION['user']['id']]);
-                    $user = new User();
-
-                   $user->setId($userResult['id']);
-                   $user->setRole($userResult['role']);
-                   $user->setEmail($userResult['email']);
-                   $user->setName($userResult['name']);
-
-
-                   return $user;
-               }else{
-                   return null;
-               }
-                
-            } )
-        );
-        $twig->addFunction(
-            new TwigFunction('isAdmin', function($user){
-                if(!empty($user)){
-                    return $user->isAdmin();  true;
-                }else{
-                    return false;
-                }
-
-
-            } )
-        );
-        echo $twig->render($name, $context);
+        echo $this->render($name, $context);
     }
     public function redirectTo($url){
         header('Location: '.$url);

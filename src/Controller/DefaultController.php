@@ -10,7 +10,7 @@ class DefaultController extends AController
 {
     public function indexAction()
     {
-        $this->render('default/index.html.twig', [
+        $this->displayRender('default/index.html.twig', [
             'test' => "TEST"
         ]);
     }

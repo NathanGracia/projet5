@@ -37,9 +37,14 @@ class CommentController extends AController
 
 
     public function createComment(){
+        if(empty($_SESSION['user'])) {
+            $id_author= 0;
+        }else{
+            $id_author = htmlspecialchars($_SESSION['user']['id']);
+        }
         $content = htmlspecialchars( $_POST['content']);
         $id_article = htmlspecialchars($_POST['id_article']);
-        $id_author = htmlspecialchars($_SESSION['user']['id']);
+
         $created_at = $timestamp = date('Y-m-d H:i:s');
 
         if(!empty($content) && !empty($id_article)){
@@ -66,7 +71,7 @@ class CommentController extends AController
 
         }
 
-        $this->render('admin/commentList.html.twig',[
+        $this->displayRender('admin/commentList.html.twig',[
             'comments' =>$comments
         ]);
     }

@@ -24,14 +24,14 @@ use Ramsey\Uuid;
 
 class ArticleController extends AController
 {
-   /**
+    /**
      * @var ArticleRepository
      */
-    private  $articleRepository;
-     /**
+    private $articleRepository;
+    /**
      * @var CommentRepository
      */
-    private  $commentRepository;
+    private $commentRepository;
     /**
      * @var UserRepository
      */
@@ -45,22 +45,20 @@ class ArticleController extends AController
         $this->userRepository = new UserRepository();
 
     }
-    
 
 
     public function showAction($param)
     {
         $slug = $param["slug"];
-       
+
         //query select * 
-        $result =  $this->articleRepository->findOneBy(['slug'=>$slug]);
-        if(empty($result)){
-           throw new HttpNotFoundException();
+        $result = $this->articleRepository->findOneBy(['slug' => $slug]);
+        if (empty($result)) {
+            throw new HttpNotFoundException();
         }
 
-    
-   
-        if(!is_null($result)){
+
+        if (!is_null($result)) {
 
             //article :
             $article = new Article();
@@ -73,14 +71,15 @@ class ArticleController extends AController
             $article->setTitle($result['title']);
             $article->setImage_url($result['image_url']);
             $article->setDate($result['date']);
-            
+            $article->setchapo($result['chapo']);
+
 
             //query select *
-            $authorResult =  $this->userRepository->findOneBy(['id'=>$article->getIdAuthor()]);
+            $authorResult = $this->userRepository->findOneBy(['id' => $article->getIdAuthor()]);
 
-            if(empty($result)){
-               $author = null;
-            }else{
+            if (empty($result)) {
+                $author = null;
+            } else {
                 $author = new User();
                 $author->setId($authorResult['id']);
                 $author->setName($authorResult['name']);
@@ -88,9 +87,9 @@ class ArticleController extends AController
             }
 
             //commentaires :
-               $comments = [];
-            $bddComments =  $this->commentRepository->findBy(['id_article'=> $result['id'], 'approved' => '1']);
-            foreach($bddComments as $bddComment){
+            $comments = [];
+            $bddComments = $this->commentRepository->findBy(['id_article' => $result['id'], 'approved' => '1']);
+            foreach ($bddComments as $bddComment) {
 
                 $comment = new Comment();
 
@@ -99,46 +98,53 @@ class ArticleController extends AController
                 $comment->setContent($bddComment['content']);
                 $comment->setCreated_at($bddComment['created_at']);
                 $comment->setId_article($bddComment['id_article']);
-         
+
                 array_push($comments, $comment);
             }
 
 
-          
-            $this->render('article/show.html.twig', [
+            $this->displayRender('article/show.html.twig', [
                 "article" => $article,
                 "author" => $author,
                 "comments" => $comments
             ]);
-        }else{
-            $this->render('404.html.twig');
+        } else {
+            $this->displayRender('404.html.twig');
         }
-    
 
-       
-        
+
     }
 
-    public function indexAction(){
+    public function indexAction()
+    {
 
-      
-        $articles =  $this->articleRepository->findAll();
-        $this->render('article/index.html.twig',[
-            'articles' =>$articles
+
+        $articles = $this->articleRepository->findAll();
+        $this->displayRender('article/index.html.twig', [
+            'articles' => $articles
         ]);
     }
 
-    public function new(){
-        $this->render('article/new.html.twig');
+    public function new()
+    {
+        $this->displayRender('article/new.html.twig');
     }
 
-    public function create(){
+    public function create()
+    {
 
-        
+        if(empty($_SESSION['user'])){
+            $this->redirectTo('/connexion');
+        }
+
         $article = new Article();
 
         $form = new Form([
             'title' => new TextType([
+                new NotNullConstraint(),
+                new NotEmptyConstraint()
+            ]),
+            'chapo' => new TextType([
                 new NotNullConstraint(),
                 new NotEmptyConstraint()
             ]),
@@ -153,7 +159,7 @@ class ArticleController extends AController
         ], $article);
 
         $form->handleRequest();
-   
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $slug = strtolower(str_replace(" ", "-", $article->getTitle()));
@@ -165,53 +171,93 @@ class ArticleController extends AController
             $idAuthor = $_SESSION['user']['id'];
             $article->setIdAuthor($idAuthor);
 
-           
-           
+
             //envoie en bdd
             $this->articleRepository->insert([
-           
+
                 'content' => $article->getContent(),
                 'image_url' => $article->getImage_url(),
                 'title' => $article->getTitle(),
                 'slug' => $article->getSlug(),
                 'date' => $article->getDate(),
+                'chapo' => $article->getChapo(),
                 'id_author' => $article->getIdAuthor()
 
             ]);
-            $this->redirectTo('/article/'.$slug);
+            $this->redirectTo('/article/' . $slug);
 
         }
-        $this->render('article/new.html.twig', [
+        $this->displayRender('article/new.html.twig', [
             'form' => $form
         ]);
     }
 
-    public function edit($params){
-        $article =  $this->articleRepository->findOneBy(['slug'=> $params['slug']]);
-        if(!is_null($article)){
+    public function edit($params)
+    {
+        $article = $this->articleRepository->findOneBy(['slug' => $params['slug']]);
+        if (!is_null($article)) {
 
-            //article :
 
-            $id = $article['id'];
-            $author = null;
-            $created_at = null;
-            $content = $article['content'];
-            $slug = $article['slug'];
-            $title = $article['title'];
-            $image_url = $article['image_url'];
+            $form = new Form([
+                'title' => new TextType([
+                    new NotNullConstraint(),
+                    new NotEmptyConstraint()
+                ]),
+                'chapo' => new TextType([
+                    new NotNullConstraint(),
+                    new NotEmptyConstraint()
+                ]),
+                'image_url' => new TextType(),
+                'content' => new TextType([
+                    new NotNullConstraint(),
+                    new NotEmptyConstraint()
+                ]),
+                '_csrf' => new CsrfType([
+                    new ValidCsrfConstraint()
+                ])
+            ], $article);
+
+
+            $form->handleRequest();
+
+
+            if ($form->isSubmitted() && $form->isValid()) {
+
+
+                $article->setDate(new \DateTime());
+
+                $idAuthor = $_SESSION['user']['id'];
+                $article->setIdAuthor($idAuthor);
+
+
+                //envoie en bdd
+                $this->articleRepository->update(['slug'=>$params['slug']],[
+
+                    'content' => $article->getContent(),
+                    'image_url' => $article->getImage_url(),
+                    'title' => $article->getTitle(),
+                    'date' => $article->getDate(),
+                    'chapo' => $article->getChapo(),
+                    'id_author' => $article->getIdAuthor()
+
+                ]);
+                $this->redirectTo('/article/' . $article['slug']);
+            }
+            $this->displayRender('article/edit.html.twig', [
+                'form' => $form,
+                'article' => $article
+            ]);
         }
-        $this->render('article/edit.html.twig', [
-            'article' => $article
-        ]);
     }
-    public function delete($params){
-      
-        if(empty($_SESSION["user"] ) || $_SESSION["user"]["role"] != "admin" ){
+
+    public function delete($params)
+    {
+
+        if (empty($_SESSION["user"]) || $_SESSION["user"]["role"] != "admin") {
             die('419'); //todo exception perm
         }
-      
+
         $this->articleRepository->deleteBy(['id' => $params['id']]);
-       
 
 
         $this->redirectTo('/articles');
@@ -220,5 +266,4 @@ class ArticleController extends AController
     }
 
 
- 
 }

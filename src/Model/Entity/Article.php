@@ -22,12 +22,25 @@ class Article
 
     private $date;
 
+    private $chapo;
+
+    /**
+     * @return mixed
+     */
+    public function getChapo()
+    {
+        return $this->chapo;
+    }
+
+    /**
+     * @param mixed $chapo
+     */
+    public function setChapo($chapo): void
+    {
+        $this->chapo = $chapo;
+    }
 
 
-
-
-
-    
     /**
      * @return mixed
      */

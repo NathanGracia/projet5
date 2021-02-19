@@ -75,7 +75,7 @@ class UserController extends AController
                 }
 
             }
-            $this->render('user/login.html.twig',[
+            $this->displayRender('user/login.html.twig',[
                 'form' => $form
                 ]);
        
@@ -131,7 +131,7 @@ class UserController extends AController
             }
 
 
-            $this->render('user/signin.html.twig', [
+            $this->displayRender('user/signin.html.twig', [
                 'form' => $form
             ]);
        
@@ -144,7 +144,7 @@ class UserController extends AController
         $user =  $_SESSION['user'];
         $commments = $this->commentRepository->findBy(['id_author'=> $user['id']]); 
     
-        $this->render('user/show.html.twig', [
+        $this->displayRender('user/show.html.twig', [
             'user' => $user,
             'comments' => $commments
         ]);
@@ -153,7 +153,7 @@ class UserController extends AController
         $user =  $this->userRepository->findOneBy(['id'=>$params['id']]);
         $commments = $this->commentRepository->findBy(['id_author'=> $params['id']]);
 
-        $this->render('user/show.html.twig', [
+        $this->displayRender('user/show.html.twig', [
             'user' => $user,
             'comments' => $commments
         ]);
@@ -161,7 +161,7 @@ class UserController extends AController
     public function index(){
         if(isset($_SESSION['user']['role']) && $_SESSION['user']['role'] == 'admin'){
             $users =  $this->userRepository->findAll();
-            $this->render('user/index.html.twig',[
+            $this->displayRender('user/index.html.twig',[
                 'users' =>$users
             ]);
         }
@@ -220,9 +220,8 @@ class UserController extends AController
                     ->setFrom('nathan.gracia.863@gmail.com')
                     ->setReplyTo('nathan.gracia.863@gmail.com')
                     ->setTo($user->getEmail())
-                    //->setBody($this->render('mail/signin.html.twig', ['token' => $token]));
-                    ->setBody('<a href="http://localhost:8000/utilisateur/validerCompte/'.$token.' style="color: #ffffff; text-decoration: none; padding: 1%">VALIDER MON COMPTE</a>
-                       ');
+                    ->setBody($this->render('mail/signin.html.twig', ['token' => $token]),  'text/html');
+
 
                 // Send the message
                 $result = $mailer->send($message);
@@ -230,7 +229,7 @@ class UserController extends AController
             }
 
 
-            $this->render('user/create.html.twig', [
+            $this->displayRender('user/create.html.twig', [
                 'form' => $form
             ]);
         }
@@ -240,7 +239,7 @@ class UserController extends AController
 
     }
     public function test(){
-        $this->render('mail/signin.html.twig');
+        $this->displayRender('mail/signin.html.twig');
     }
 
     public function validateAccount($param){
@@ -280,7 +279,7 @@ class UserController extends AController
                 }
 
 
-                $this->render('user/finishAccount.html.twig', [
+                $this->displayRender('user/finishAccount.html.twig', [
                     'form' => $form,
                     'token' => $param['token']
                 ]);
@@ -292,6 +291,14 @@ class UserController extends AController
     public function unconnect(){
         $_SESSION['user'] = null;
         $this->redirectTo('/articles');
+    }
+
+    public function toAdmin($params){
+        $idUser = $params['id'];
+        if(!empty($_SESSION['user']) && $_SESSION['user']['role'] == 'admin'){
+            $this->userRepository->update(['id'=>$idUser], ['role' => 'admin']);
+            $this->redirectTo('/utilisateurs');
+        }
     }
 
 

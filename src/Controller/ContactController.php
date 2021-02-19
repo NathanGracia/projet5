@@ -45,6 +45,6 @@ class ContactController extends AController
         }
 
           
-        $this->render('contact.html.twig');
+        $this->displayRender('contact.html.twig');
     }
 }

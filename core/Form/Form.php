@@ -18,7 +18,9 @@ class Form
         $this->datas = $datas;
 
         foreach ($this->parts as $name => $type) {
+
             $type->setValue(Explorer::getValue($datas, $name));
+
         }
     }
 

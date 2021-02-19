@@ -24,7 +24,8 @@
 
   <link rel="stylesheet" href="/css/style.css">
 
-
+{% block head %}
+  {%  endblock %}
 
 </head>
 
@@ -70,7 +71,7 @@
             </div>
             {% else %}
               <div class="ml-md-auto top-social d-none d-lg-inline-block">
-                <a href="/connection" class="d-inline-block p-3"><span class=>Se connecter</span></a>
+                <a href="/connexion" class="d-inline-block p-3"><span class=>Se connecter</span></a>
               </div>
             {% endif %}
             
@@ -96,9 +97,7 @@
                 <li>
                   <a href="/articles" class="nav-link text-left">Articles</a>
                 </li>
-                <li>
-                  <a href="/article/nouveau" class="nav-link text-left">Nouvel article</a>
-                </li>
+
        
                 <li><a href="/contact" class="nav-link text-left">Contact</a></li>
                 {% if not user().role is same as(admin)  %}

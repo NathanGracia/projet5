@@ -21,9 +21,11 @@
                   <h6 class="card-subtitle mb-2 text-muted">
                     {% if user.role == 'admin' %}
                       <span class="date-read text-info">Administrateur</span>
+                    {% else %}
+                      <a href="/utilisateur/passerAdministrateur/{{ user.id }}"><div style="text-decoration: underline; color: #78ad39" >Passer l'utilisateur en administrateur</div></a>
                     {% endif %}<br>
                     {% if user.activated == '0' %}
-                      <span class="date-read text-warning">Ce compte n'est pas encore activé</span>
+                      <span class="date-read text-warning" >Ce compte n'est pas encore activé</span>
                     {% endif %}
 
                     {% if user.activated == '1' %}

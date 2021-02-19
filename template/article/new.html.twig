@@ -16,6 +16,10 @@
                             <input name="title" id="title" required class="form-control">
                         </div>
                         <div class="form-group">
+                            <label for="title">Chapô</label>
+                            <input name="chapo" id="title" value ="{{ article.chapo }}" required class="form-control">
+                        </div>
+                        <div class="form-group">
                             <label for="image_url">Url de l'image de l'article</label>
                             <input name="image_url" id="image_url" class="form-control">
                         </div>
@@ -28,7 +32,7 @@
                             <textarea name="content" id="message" cols="30" rows="10" class="form-control"></textarea>
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Enregistrer l'article" class="btn btn-primary py-3">
+                            <input type="submit" style="color:white" value="Enregistrer l'article" class="btn btn-primary py-3">
                         </div>
     
                     </form>
