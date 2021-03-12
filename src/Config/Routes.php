@@ -5,6 +5,7 @@ namespace App\Config;
 use App\Controller\ArticleController;
 use App\Controller\CommentController;
 use App\Controller\ContactController;
+use App\Controller\DefaultController;
 use App\Controller\UserController;
 use Core\Router\IRoutes;
 use Core\Router\Route;
@@ -14,6 +15,7 @@ abstract class Routes implements IRoutes
     public static function getRoutes(): array
     {
         return [
+            new Route('/accueil', DefaultController::class, 'index'),
             new Route('/article', ArticleController::class, 'showAction'),
             new Route('/article/nouveau', ArticleController::class, 'create'),
             new Route('/article/edit/{slug}', ArticleController::class, 'edit'),

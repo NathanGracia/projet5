@@ -29,21 +29,32 @@ class Form
         return $_SERVER['REQUEST_METHOD'] === 'POST';
     }
 
-    public function isValid(): bool
+    public function isValid()
     {
+
+        if(empty($this->getErrors())){
+            return true;
+        }else{
+            return false;
+        }
+
+
+    }
+    public function getErrors(){
         /**
          * @var string $name
          * @var AFormType $type
          */
+        $errorMessages = [];
         foreach ($this->parts as $name => $type) {
             foreach ($type->getConstraints() as $constraint) {
                 if (!$constraint->isValid($type->getValue())) {
-                    return false;
+                    $errorMessages[] = $constraint->getMessage();
                 }
             }
         }
 
-        return true;
+        return array_unique($errorMessages);
     }
 
     public function handleRequest(): void

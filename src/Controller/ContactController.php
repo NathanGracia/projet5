@@ -25,7 +25,10 @@ class ContactController extends AController
                 new NotEmptyConstraint()
             ]),
             'subject' => new TextType(),
-            'mail' => new TextType(),
+            'mail' => new TextType([
+                new NotNullConstraint(),
+                new NotEmptyConstraint()
+            ]),
             'content' => new TextType([
                 new NotNullConstraint(),
                 new NotEmptyConstraint()
@@ -33,7 +36,7 @@ class ContactController extends AController
             ],$contact);
 
         $form->handleRequest();
-     
+
         if ($form->isSubmitted() && $form->isValid()) {
       
             $mail = $contact->getMail();
@@ -41,10 +44,17 @@ class ContactController extends AController
             $content = $contact->getContent();
             $contact->sendMail($mail, $name, $content);
 
-            var_dump("mail envoyé ?");die;
+            $this->redirectTo('/articles');
+        }
+        $errors = [];
+        if($form->isSubmitted() && !$form->isValid()){
+            $errors = $form->getErrors();
         }
 
+
           
-        $this->displayRender('contact.html.twig');
+        $this->displayRender('contact.html.twig', [
+            'errors' => $errors
+        ]);
     }
 }

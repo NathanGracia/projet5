@@ -187,14 +187,26 @@ class ArticleController extends AController
             $this->redirectTo('/article/' . $slug);
 
         }
+        $errors = [];
+        if($form->isSubmitted() && !$form->isValid()){
+            $errors = $form->getErrors();
+        }
         $this->displayRender('article/new.html.twig', [
-            'form' => $form
+            'form' => $form,
+            'errors' => $errors
         ]);
     }
 
     public function edit($params)
     {
         $article = $this->articleRepository->findOneBy(['slug' => $params['slug']]);
+        //verifier qu'il a les droits
+        if(empty($_SESSION['user'])){
+           $this->redirectTo('/connexion');
+        }
+
+
+
         if (!is_null($article)) {
 
 
@@ -220,6 +232,7 @@ class ArticleController extends AController
 
             $form->handleRequest();
 
+            dump($form->isSubmitted());
 
             if ($form->isSubmitted() && $form->isValid()) {
 
@@ -243,9 +256,14 @@ class ArticleController extends AController
                 ]);
                 $this->redirectTo('/article/' . $article['slug']);
             }
+            $errors = [];
+            if($form->isSubmitted() && !$form->isValid()){
+                $errors = $form->getErrors();
+            }
             $this->displayRender('article/edit.html.twig', [
                 'form' => $form,
-                'article' => $article
+                'article' => $article,
+                'errors' => $errors
             ]);
         }
     }

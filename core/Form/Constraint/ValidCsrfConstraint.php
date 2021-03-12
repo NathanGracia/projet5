@@ -33,4 +33,9 @@ class ValidCsrfConstraint extends AConstraint
       
         return true;
     }
+
+    public function getMessage(): string
+    {
+        return "Erreur CSRF : rechargez la page";
+    }
 }

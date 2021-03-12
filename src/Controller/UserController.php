@@ -159,6 +159,7 @@ class UserController extends AController
         ]);
     }
     public function index(){
+
         if(isset($_SESSION['user']['role']) && $_SESSION['user']['role'] == 'admin'){
             $users =  $this->userRepository->findAll();
             $this->displayRender('user/index.html.twig',[

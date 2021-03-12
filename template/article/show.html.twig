@@ -13,9 +13,12 @@
                         {{ article.title }}
                     </h1>
                     <a href="/article/edit/{{ article.slug }}">
+
+                        {%  if user().role == 'admin' or user().id == article.id  %}
                         <button type="button" class="btn btn-primary"
                                 style="background: grey; border-color: white; margin-bottom: 20px;">Modifier
                         </button>
+                        {%  endif %}
                     </a>
                     <div class="post-meta d-flex mb-5">
                         <div class="bio-pic mr-3">
@@ -92,7 +95,7 @@
                                        value="{{ article.slug }}">
 
                                 <div class="form-group">
-                                    <input type="submit" value="Post Comment" class="btn btn-primary py-3">
+                                    <input type="submit" value="Poster un commentaire" class="btn btn-primary py-3">
                                 </div>
 
                             </form>

@@ -8,4 +8,9 @@ class NotNullConstraint extends AConstraint
     {
         return $value !== null;
     }
+
+    public function getMessage(): string
+    {
+        return "Veuillez remplir tout les champs obligatoires";
+    }
 }

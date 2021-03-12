@@ -7,17 +7,21 @@
                 <div class="pt-5">
                 <div class="comment-form-wrap pt-5">
                     <div class="section-title">
-                    <h2 class="mb-5">Nouvel article</h2>
+                    <h2 class="mb-5">Modifier l'article</h2>
                     </div>
                     <form action="/article/edit/{{ article.slug }}" method='get' class="p-5 bg-light">
-                
+                        {% for error in errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
                         <div class="form-group">
                             <label for="title">Titre de l'article</label>
                             <input name="title" id="title" value ="{{ article.title }}" required class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="title">Chapô</label>
-                            <input name="title" id="title" value ="{{ article.chapo }}" required class="form-control">
+                            <input name="title" id="title" value ="{{ article.chapo }}"  class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="image_url">Url de l'image de l'article</label>

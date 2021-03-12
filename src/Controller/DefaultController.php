@@ -8,10 +8,8 @@ use Core\Controller\AController;
 
 class DefaultController extends AController
 {
-    public function indexAction()
+    public function index()
     {
-        $this->displayRender('default/index.html.twig', [
-            'test' => "TEST"
-        ]);
+        $this->displayRender('index.html.twig');
     }
 }
