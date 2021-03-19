@@ -18,7 +18,7 @@ class CommentController extends AController
    /**
      * @var CommentRepository
      */
-    private  $commentRepository;
+    private CommentRepository $commentRepository;
     /**
      * @var UserRepository
      */
@@ -26,7 +26,7 @@ class CommentController extends AController
     /**
      * @var ArticleRepository
      */
-    private  $articleRepository;
+    private ArticleRepository $articleRepository;
 
     public function __construct()
     {
@@ -78,7 +78,7 @@ class CommentController extends AController
 
     public function delete($parameters){
         if(empty($_SESSION["user"] ) || $_SESSION["user"]["role"] != "admin" ){
-            die('419'); //todo exception perm
+            $this->redirectTo('/accueil');
         }
 
 
@@ -90,7 +90,7 @@ class CommentController extends AController
     }
     public function approve($parameters){
         if(empty($_SESSION["user"] ) || $_SESSION["user"]["role"] != "admin" ){
-            die('419'); //todo exception perm
+            $this->redirectTo('/accueil');
         }
 
         $this->commentRepository->update(['id' => $parameters['id']], ['approved'=> 1]);

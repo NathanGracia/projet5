@@ -43,7 +43,6 @@ class ArticleController extends AController
         $this->articleRepository = new ArticleRepository();
         $this->commentRepository = new CommentRepository();
         $this->userRepository = new UserRepository();
-
     }
 
 
@@ -51,7 +50,7 @@ class ArticleController extends AController
     {
         $slug = $param["slug"];
 
-        //query select * 
+        //query select *
         $result = $this->articleRepository->findOneBy(['slug' => $slug]);
         if (empty($result)) {
             throw new HttpNotFoundException();
@@ -59,7 +58,6 @@ class ArticleController extends AController
 
 
         if (!is_null($result)) {
-
             //article :
             $article = new Article();
 
@@ -90,7 +88,6 @@ class ArticleController extends AController
             $comments = [];
             $bddComments = $this->commentRepository->findBy(['id_article' => $result['id'], 'approved' => '1']);
             foreach ($bddComments as $bddComment) {
-
                 $comment = new Comment();
 
                 $comment->setId($bddComment['id']);
@@ -106,22 +103,18 @@ class ArticleController extends AController
             $this->displayRender('article/show.html.twig', [
                 "article" => $article,
                 "author" => $author,
-                "comments" => $comments
+                "comments" => $comments,
             ]);
         } else {
             $this->displayRender('404.html.twig');
         }
-
-
     }
 
     public function indexAction()
     {
-
-
         $articles = $this->articleRepository->findAll();
         $this->displayRender('article/index.html.twig', [
-            'articles' => $articles
+            'articles' => $articles,
         ]);
     }
 
@@ -132,8 +125,7 @@ class ArticleController extends AController
 
     public function create()
     {
-
-        if(empty($_SESSION['user'])){
+        if (empty($_SESSION['user'])) {
             $this->redirectTo('/connexion');
         }
 
@@ -142,26 +134,25 @@ class ArticleController extends AController
         $form = new Form([
             'title' => new TextType([
                 new NotNullConstraint(),
-                new NotEmptyConstraint()
+                new NotEmptyConstraint(),
             ]),
             'chapo' => new TextType([
                 new NotNullConstraint(),
-                new NotEmptyConstraint()
+                new NotEmptyConstraint(),
             ]),
             'image_url' => new TextType(),
             'content' => new TextType([
                 new NotNullConstraint(),
-                new NotEmptyConstraint()
+                new NotEmptyConstraint(),
             ]),
             '_csrf' => new CsrfType([
-                new ValidCsrfConstraint()
-            ])
+                new ValidCsrfConstraint(),
+            ]),
         ], $article);
 
         $form->handleRequest();
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $slug = strtolower(str_replace(" ", "-", $article->getTitle()));
             $article->setSlug($slug);
 
@@ -181,19 +172,18 @@ class ArticleController extends AController
                 'slug' => $article->getSlug(),
                 'date' => $article->getDate(),
                 'chapo' => $article->getChapo(),
-                'id_author' => $article->getIdAuthor()
+                'id_author' => $article->getIdAuthor(),
 
             ]);
-            $this->redirectTo('/article/' . $slug);
-
+            $this->redirectTo('/article/'.$slug);
         }
         $errors = [];
-        if($form->isSubmitted() && !$form->isValid()){
+        if ($form->isSubmitted() && !$form->isValid()) {
             $errors = $form->getErrors();
         }
         $this->displayRender('article/new.html.twig', [
             'form' => $form,
-            'errors' => $errors
+            'errors' => $errors,
         ]);
     }
 
@@ -201,42 +191,37 @@ class ArticleController extends AController
     {
         $article = $this->articleRepository->findOneBy(['slug' => $params['slug']]);
         //verifier qu'il a les droits
-        if(empty($_SESSION['user'])){
-           $this->redirectTo('/connexion');
+        if (empty($_SESSION['user'])) {
+            $this->redirectTo('/connexion');
         }
 
 
-
         if (!is_null($article)) {
-
-
             $form = new Form([
                 'title' => new TextType([
                     new NotNullConstraint(),
-                    new NotEmptyConstraint()
+                    new NotEmptyConstraint(),
                 ]),
                 'chapo' => new TextType([
                     new NotNullConstraint(),
-                    new NotEmptyConstraint()
+                    new NotEmptyConstraint(),
                 ]),
                 'image_url' => new TextType(),
                 'content' => new TextType([
                     new NotNullConstraint(),
-                    new NotEmptyConstraint()
+                    new NotEmptyConstraint(),
                 ]),
                 '_csrf' => new CsrfType([
-                    new ValidCsrfConstraint()
-                ])
+                    new ValidCsrfConstraint(),
+                ]),
             ], $article);
 
 
             $form->handleRequest();
 
-            dump($form->isSubmitted());
+
 
             if ($form->isSubmitted() && $form->isValid()) {
-
-
                 $article->setDate(new \DateTime());
 
                 $idAuthor = $_SESSION['user']['id'];
@@ -244,43 +229,40 @@ class ArticleController extends AController
 
 
                 //envoie en bdd
-                $this->articleRepository->update(['slug'=>$params['slug']],[
+                $this->articleRepository->update(['slug' => $params['slug']], [
 
                     'content' => $article->getContent(),
                     'image_url' => $article->getImage_url(),
                     'title' => $article->getTitle(),
                     'date' => $article->getDate(),
                     'chapo' => $article->getChapo(),
-                    'id_author' => $article->getIdAuthor()
+                    'id_author' => $article->getIdAuthor(),
 
                 ]);
-                $this->redirectTo('/article/' . $article['slug']);
+                $this->redirectTo('/article/'.$article['slug']);
             }
             $errors = [];
-            if($form->isSubmitted() && !$form->isValid()){
+            if ($form->isSubmitted() && !$form->isValid()) {
                 $errors = $form->getErrors();
             }
             $this->displayRender('article/edit.html.twig', [
                 'form' => $form,
                 'article' => $article,
-                'errors' => $errors
+                'errors' => $errors,
             ]);
         }
     }
 
     public function delete($params)
     {
-
         if (empty($_SESSION["user"]) || $_SESSION["user"]["role"] != "admin") {
-            die('419'); //todo exception perm
+            $this->redirectTo('/accueil');
         }
 
         $this->articleRepository->deleteBy(['id' => $params['id']]);
 
 
         $this->redirectTo('/articles');
-
-
     }
 
 

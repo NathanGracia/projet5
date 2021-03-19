@@ -79,6 +79,7 @@ abstract class ARepository
 
         }
 
+
         $sql .= " ) VALUES ( ";
 
         $first = true;

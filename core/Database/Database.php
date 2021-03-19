@@ -4,6 +4,7 @@ namespace Core\Database;
 
 use PDO;
 use  App\Config\Config;
+use PDOException;
 
 class Database
 {

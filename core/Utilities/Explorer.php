@@ -4,12 +4,13 @@
 namespace Core\Utilities;
 
 
+use Exception;
 use ReflectionException;
 use ReflectionObject;
 
 abstract class Explorer
 {
-    static public function getValue($tabOrObj, string $key, $default = null)
+    public static function getValue($tabOrObj, string $key, $default = null)
     {
         try {
             if (is_array($tabOrObj)) {
@@ -17,7 +18,7 @@ abstract class Explorer
             }
 
             if (!is_object($tabOrObj)) {
-                throw new \Exception('Should be an object or an array.');
+                throw new Exception('Should be an object or an array.');
             }
 
             $reflectionObject = new ReflectionObject($tabOrObj);
@@ -29,18 +30,19 @@ abstract class Explorer
             foreach (['', 'is', 'has', 'get'] as $startMethodName) {
                 $methodName = $startMethodName . ((strlen($startMethodName) === 0) ? $key : ucfirst($key));
 
-                if ($reflectionObject->hasMethod($methodName) && $reflectionObject->getMethod($methodName)->isPublic()) {
+                if ($reflectionObject->hasMethod($methodName) && $reflectionObject->getMethod($methodName)->isPublic(
+                    )) {
                     return $tabOrObj->$methodName();
                 }
             }
 
             return $default;
         } catch (ReflectionException $e) {
-            throw new \Exception('Should be an object or an array.');
+            throw new Exception('Should be an object or an array.');
         }
     }
 
-    static public function setValue($tabOrObj, string $key, $value)
+    public static function setValue($tabOrObj, string $key, $value)
     {
         try {
             if (is_array($tabOrObj)) {
@@ -49,7 +51,7 @@ abstract class Explorer
             }
 
             if (!is_object($tabOrObj)) {
-                throw new \Exception('Should be an object or an array.');
+                throw new Exception('Should be an object or an array.');
             }
 
             $reflectionObject = new ReflectionObject($tabOrObj);
@@ -62,13 +64,14 @@ abstract class Explorer
             foreach (['', 'set'] as $startMethodName) {
                 $methodName = $startMethodName . ((strlen($startMethodName) === 0) ? $key : ucfirst($key));
 
-                if ($reflectionObject->hasMethod($methodName) && $reflectionObject->getMethod($methodName)->isPublic()) {
+                if ($reflectionObject->hasMethod($methodName) && $reflectionObject->getMethod($methodName)->isPublic(
+                    )) {
                     $tabOrObj->$methodName($value);
                     return;
                 }
             }
         } catch (ReflectionException $e) {
-            throw new \Exception('Should be an object or an array.');
+            throw new Exception('Should be an object or an array.');
         }
     }
 

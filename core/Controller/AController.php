@@ -14,7 +14,7 @@ use Twig\Loader\FilesystemLoader;
 abstract class AController
 {
 
-    private $userRepository;
+    private UserRepository $userRepository;
 
     public function __construct()
     {
@@ -29,11 +29,9 @@ abstract class AController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function render(string $name, array $context): string
-    {
+    public function render(string $name, array $context): string  {
         $loader = new FilesystemLoader('../template');
         $twig = new Environment($loader, [
-//            'cache' => '../var/cache'
         ]);
         $twig->addFunction(
             new TwigFunction('dump', function (...$vars) {
@@ -65,7 +63,7 @@ abstract class AController
             new TwigFunction('isAdmin', function ($user) {
                 if (!empty($user)) {
                     return $user->isAdmin();
-                    true;
+
                 } else {
                     return false;
                 }

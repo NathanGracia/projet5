@@ -56,14 +56,14 @@ class UserController extends AController
             ],$user);
 
             $form->handleRequest();
-           
+        $errors = [];
        
             if ($form->isSubmitted() && $form->isValid()) {
            
                 $userFromBDD =  $this->userRepository->findOneBy(['email'=>$user->getEmail()]);
 
                 if($userFromBDD['activated'] == 0){
-                    dd('mauvais ids');
+                    $errors[] = "Ce compte n'est pas encore actif";
                 }
                 
                 if(password_verify($user->getPassword(),$userFromBDD['password'])){
@@ -71,12 +71,13 @@ class UserController extends AController
 
                     $this->redirectTo('/profil');
                 }else{
-                    dd('mauvais ids');
+                    $errors[] = "Mauvais identifiants ou mauvais mot de passe";
                 }
 
             }
             $this->displayRender('user/login.html.twig',[
-                'form' => $form
+                'form' => $form,
+                'errors' => $errors
                 ]);
        
         
@@ -126,8 +127,7 @@ class UserController extends AController
                    
     
                 ]);
-                    dd('utilisateur enregistré');
-                //redirect
+                $this->redirectTo('/utilisateurs');
             }
 
 
@@ -171,7 +171,7 @@ class UserController extends AController
     public function delete($params){
 
         if(empty($_SESSION["user"] ) || $_SESSION["user"]["role"] != "admin" ){
-            die('419'); //todo exception perm
+            $this->redirectTo('/accueil');
         }
 
         $this->userRepository->deleteBy(['id' => $params['id']]);

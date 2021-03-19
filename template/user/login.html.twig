@@ -281,6 +281,11 @@
 
                   <!-- Login Form -->
                   <form class="form-signin" method='POST' action="/connexion">
+                        {% for error in errors %}
+                              <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                              </div>
+                        {% endfor %}
                         <input type="text" id="email" class="fadeIn second" name="email" placeholder="Email">
                         <input type="password" id="password" class="fadeIn third" name="password" placeholder="Mot de passe">
                         <div class="form-group" hidden>
