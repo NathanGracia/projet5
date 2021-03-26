@@ -1,7 +1,7 @@
 # projet5
 How to install the project :
 ```bash 
-git clone
+git clone https://github.com/NathanGracia/projet5.git
 composer update
 run your server
 ```
