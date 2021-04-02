@@ -8,3 +8,4 @@ composer update
 ```
 run your server
 import the bdd template (projet5.sql)
+Change the bd ids in src/config/Config.php
